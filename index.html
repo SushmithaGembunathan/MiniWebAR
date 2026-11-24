@@ -2,85 +2,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Mini WebAR</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini WebAR Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial;
-        }
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+    }
 
-        .heading {
-            position: fixed;
-            top: 15px;
-            width: 100%;
-            text-align: center;
-            z-index: 10;
-            color: white;
-            text-shadow: 1px 1px 4px black;
-        }
-    </style>
+    #status {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 999;
+      padding: 12px;
+      background: white;
+      color: black;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="heading">
-    <h2>✨ Welcome to Mini WebAR</h2>
-    <p>Scan your image to reveal the magic!</p>
-</div>
+<div id="status">Loading AR...</div>
 
 <a-scene
-    mindar-image="imageTargetSrc: ./targets.mind;"
-    color-space="sRGB"
-    renderer="colorManagement: true"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false">
+  mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;"
+  embedded
+  color-space="sRGB"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false">
 
-    <a-camera position="0 0 0"
-              look-controls="enabled: false">
-    </a-camera>
+  <a-camera
+    position="0 0 0"
+    look-controls="enabled: false">
+  </a-camera>
 
-    <a-entity mindar-image-target="targetIndex: 0">
+  <a-entity mindar-image-target="targetIndex: 0">
 
-        <!-- Floating 3D object -->
-        <a-box
-            position="0 0.2 0.2"
-            rotation="0 45 0"
-            color="#D4A373"
-            animation="property: rotation;
-                       to: 0 405 0;
-                       loop: true;
-                       dur: 4000">
-        </a-box>
+    <a-box
+      position="0 0.2 0.2"
+      color="red"
+      animation="property: rotation;
+                 to: 0 360 0;
+                 loop: true;
+                 dur: 3000">
+    </a-box>
 
-        <!-- Text -->
-        <a-text
-            value="Hello AR World!"
-            position="-0.5 -0.4 0"
-            color="#FFFFFF"
-            width="2"
-            align="center">
-        </a-text>
+    <a-text
+      value="Hello AR!"
+      position="-0.5 -0.4 0"
+      color="white"
+      width="2">
+    </a-text>
 
-        <!-- Floating sphere -->
-        <a-sphere
-            position="0.5 0.2 0.2"
-            radius="0.12"
-            color="#FFD166"
-            animation="property: position;
-                       to: 0.5 0.5 0.2;
-                       dir: alternate;
-                       loop: true;
-                       dur: 1500">
-        </a-sphere>
-
-    </a-entity>
+  </a-entity>
 
 </a-scene>
+
+<script>
+  const scene = document.querySelector("a-scene");
+  const status = document.querySelector("#status");
+
+  scene.addEventListener("arReady", () => {
+    status.innerText = "AR READY! Scan your image.";
+  });
+
+  scene.addEventListener("arError", () => {
+    status.innerText = "AR ERROR: Camera or browser initialization failed.";
+  });
+</script>
 
 </body>
 </html>
