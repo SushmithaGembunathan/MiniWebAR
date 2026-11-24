@@ -2,39 +2,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mini WebAR Test</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini WebAR Experience</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
 
   <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: Arial;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
-    #status {
+    a-scene {
+      width: 100%;
+      height: 100%;
       position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 999;
-      padding: 12px;
-      background: white;
-      color: black;
-      border-radius: 8px;
+      inset: 0;
+    }
+
+    .info {
+      position: fixed;
+      z-index: 1000;
+      top: 15px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-family: Arial;
+      text-shadow: 1px 1px 4px black;
+      pointer-events: none;
     }
   </style>
 </head>
 
 <body>
 
-<div id="status">Loading AR...</div>
+<div class="info">
+  <h2>✨ Mini WebAR</h2>
+  <p>Scan your image to reveal the magic!</p>
+</div>
 
 <a-scene
   mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;"
-  embedded
   color-space="sRGB"
+  renderer="colorManagement: true; alpha: true"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false">
 
@@ -45,38 +60,43 @@
 
   <a-entity mindar-image-target="targetIndex: 0">
 
+    <!-- Rotating 3D cube -->
     <a-box
-      position="0 0.2 0.2"
-      color="red"
+      position="0 0.2 0.1"
+      rotation="0 0 0"
+      scale="0.5 0.5 0.5"
+      color="#E76F51"
+      material="metalness: 0.2; roughness: 0.4"
       animation="property: rotation;
-                 to: 0 360 0;
+                 to: 360 360 0;
                  loop: true;
-                 dur: 3000">
+                 dur: 4000">
     </a-box>
 
+    <!-- Floating sphere -->
+    <a-sphere
+      position="0.5 0.6 0.1"
+      radius="0.12"
+      color="#FFD166"
+      animation="property: position;
+                 to: 0.5 0.8 0.1;
+                 dir: alternate;
+                 loop: true;
+                 dur: 1500">
+    </a-sphere>
+
+    <!-- Welcome text -->
     <a-text
-      value="Hello AR!"
-      position="-0.5 -0.4 0"
-      color="white"
+      value="Hello AR World!"
+      position="-0.5 -0.5 0.1"
+      color="#FFFFFF"
+      align="center"
       width="2">
     </a-text>
 
   </a-entity>
 
 </a-scene>
-
-<script>
-  const scene = document.querySelector("a-scene");
-  const status = document.querySelector("#status");
-
-  scene.addEventListener("arReady", () => {
-    status.innerText = "AR READY! Scan your image.";
-  });
-
-  scene.addEventListener("arError", () => {
-    status.innerText = "AR ERROR: Camera or browser initialization failed.";
-  });
-</script>
 
 </body>
 </html>
